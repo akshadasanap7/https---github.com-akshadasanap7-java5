@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simple Theme Toggler</title>
+
+<style>
+:root {
+    --bg-color: #f4f4f4;
+    --text-color: #111;
+    --card-color: #ffffff;
+}
+
+body.dark {
+    --bg-color: #121212;
+    --text-color: #f4f4f4;
+    --card-color: #1f1f1f;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s ease;
+}
+
+.container {
+    background: var(--card-color);
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    transition: 0.4s ease;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.toggle-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    width: 60px;
+    height: 30px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    background: #ccc;
+    border-radius: 50px;
+    inset: 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+input:checked + .slider {
+    background: #4f46e5;
+}
+
+input:checked + .slider::before {
+    transform: translateX(30px);
+}
+
+.emoji {
+    font-size: 22px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Theme Toggler</h1>
+
+    <div class="toggle-box">
+        <span class="emoji">☀️</span>
+
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+        </label>
+
+        <span class="emoji">🌙</span>
+    </div>
+</div>
+
+<script>
+const toggle = document.getElementById("themeToggle");
+const body = document.body;
+
+/* Apply Theme Function */
+function applyTheme(theme) {
+    if (theme === "dark") {
+        body.classList.add("dark");
+        toggle.checked = true;
+        localStorage.setItem("theme", "dark");
+        console.log("🌙 Dark theme applied");
+    } else {
+        body.classList.remove("dark");
+        toggle.checked = false;
+        localStorage.setItem("theme", "light");
+        console.log("☀️ Light theme applied");
+    }
+}
+
+/* Load saved theme on page load */
+const savedTheme = localStorage.getItem("theme") || "light";
+applyTheme(savedTheme);
+
+/* Toggle using switch */
+toggle.addEventListener("change", () => {
+    const newTheme = body.classList.contains("dark") ? "light" : "dark";
+    applyTheme(newTheme);
+});
+
+/* -------- CONSOLE METHODS -------- */
+window.setDark = () => applyTheme("dark");
+window.setLight = () => applyTheme("light");
+window.toggleTheme = () => {
+    body.classList.contains("dark") ? applyTheme("light") : applyTheme("dark");
+};
+window.getTheme = () => {
+    console.log("
+     Current theme:", localStorage.getItem("theme"));
+    return localStorage.getItem("theme");
+};
+</script>
+
+</body>
+</html>
